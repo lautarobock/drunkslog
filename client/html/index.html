@@ -19,11 +19,11 @@
         <!-- <link rel="stylesheet" href="http://netdna.bootstrapcdn.com/bootstrap/3.0.1/css/bootstrap-theme.min.css"></link> -->
         <!-- Theme: http://bootswatch.com/slate/ -->
 
-        
+
         <link rel="stylesheet" href="../css/bootstrap.slate.min.css">
         <link rel="stylesheet" href="../css/style.css"></link>
 
-        <!-- https://github.com/evilstreak/markdown-js/tree/master/test/features -->        
+        <!-- https://github.com/evilstreak/markdown-js/tree/master/test/features -->
         <script src="../lib/markdown/markdown.min.js"></script>
         <!-- http://craig.is/killing/mice -->
         <!-- <script src="../lib/mousetrap/mousetrap.min.js"></script> -->
@@ -43,11 +43,12 @@
         <script src="../lib/underscore/underscore-min.js"></script>
         <script src="../lib/angular-google-maps/dist/angular-google-maps.min.js"></script>
         <script src="../lib/angularjs-google-places-fork/dist/angularjs-google-places.min.js"></script>
+        <script src="../lib/lodash/lodash.min.js"></script>
         <script src="../js/util/util.js"></script>
         <script src="../js/stats/StatsService.js"></script>
         <script data-main="../js/app" src="../lib/requirejs/require.js"></script>
 
-       
+
   </head>
   <body style="margin-top: 100px; " >
     <div loading>{{'menu.loading'|translate}}</div>
@@ -57,9 +58,9 @@
       <div class="row">
         <div ng-view></div>
       </div>
-        
+
       <hr>
-      
+
       <footer>
         <div class="row">
           <div class="col-lg-12">
@@ -104,7 +105,7 @@
         }
 
         function onLoadSuccess() {
-          googleLogIn()   
+          googleLogIn()
         }
 
         function cb(authResult) {
@@ -119,7 +120,7 @@
             }
             waitForNg();
         }
-    </script>    
+    </script>
   </body>
-  
+
 </html>

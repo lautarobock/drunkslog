@@ -13,14 +13,10 @@ define(["resources"], function() {
             });
         });
 
+        $scope.showZeros = false;
+
         $scope.config = {
-            data: VintageCellar,
-            collection: VintageCellar.query({populate:true}, function(cellars) {
-                $scope.bottleCount = 0;
-                // angular.forEach(cellars, function(c) {
-                //     $scope.bottleCount += c.left;
-                // });
-            }),
+            collection: [],
             name: $translate('beer.data.beer')+'s',
             singular: $translate('beer.data.beer'),
             orderBy: "beer.name",
@@ -71,11 +67,39 @@ define(["resources"], function() {
                 caption: 'Fecha',
                 width: '14em',
                 format: function(value) {
-                    return $filter('date')(value,'dd-MM-yyyy');
+                    var format = $filter('date');
+                    return format(
+                        new Date(
+                            format(
+                                value,
+                                'dd-MM-yyyy'
+                            ).date
+                        ),
+                        'dd-MM-yyyy'
+                    );
                 }
-            }
-            ]
+            }]
         };
+
+        function reload() {
+            VintageCellar.query({populate:true}, function(cellars) {
+                if ( $scope.showZeros ) {
+                    $scope.config.collection = cellars;
+                } else {
+                    $scope.config.collection = _.filter(cellars, function(cellar) {
+                        return cellar.left > 0;
+                    });
+                }
+                $scope.bottleCount = 0;
+                angular.forEach(cellars, function(c) {
+                    $scope.bottleCount += c.left;
+                });
+            })
+        }
+        // reload();
+        $scope.$watch('showZeros', function() {
+            reload();
+        });
     }]);
 
     vintage.controller(

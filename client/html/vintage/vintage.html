@@ -2,19 +2,20 @@
     <h1>{{'content.vintage' | translate }}</h1>
     <hr>
     <div class="well" style="font-size: 14px;">
-        <!-- <div class="row">
-            <div class="col-xs-10">{{'cellar.bottlesAmount'|translate}}: <b>{{bottleCount}}</b> </div>
-            <div class="col-xs-2"><button ng-click="clearZeros()" type="button" class="btn btn-success">Limpiar ceros</button></div>
-        </div> -->
         <div class="row">
-            <div class="col-xs-10">{{'cellar.bottlesAmount'|translate}}: <b>{{bottleCount}}</b> </div>
+            <div class="col-xs-6">{{'cellar.bottlesAmount'|translate}}: <b>{{bottleCount}}</b> </div>
+            <div class="col-xs-4">
+                <label>
+                    <input type="checkbox" ng-model="showZeros"/> Mostrar inexistentes
+                </label>
+            </div>
             <div class="col-xs-2"><a href="#vintage/new" type="button" class="btn btn-success">Nueva</a></div>
         </div>
     </div>
     <hr>
     <gt-table
-    config="config"
-    ></gt-table>
+        config="config">
+    </gt-table>
     <hr/>
 </div>
 

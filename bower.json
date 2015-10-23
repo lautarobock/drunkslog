@@ -16,7 +16,8 @@
     "angularjs-google-places": "0.1.0",
     "angularjs-google-places-fork": "git://github.com/lautarobock/angularjs-google-places.git",
     "lautarobock-ng-util": ">=0",
-    "d3": "~3.4.3"
+    "d3": "~3.4.3",
+    "lodash": "~3.10.1"
   },
   "resolutions": {
     "angular": "1.2.6"
