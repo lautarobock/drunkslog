@@ -1,1 +1,1 @@
-{ "options" : { "create" : "activities", "max" : 100, "size" : 16384, "capped" : true }, "indexes" : [ { "v" : 1, "key" : { "_id" : 1 }, "ns" : "drunkslog.activities", "name" : "_id_" } ] }
+{"options":{"capped":true,"size":16384,"max":100},"indexes":[{"v":1,"key":{"_id":1},"ns":"drunkslog.activities","name":"_id_"}]}
