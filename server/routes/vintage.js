@@ -13,7 +13,7 @@ exports.save = function(req, res) {
 };
 
 exports.findAll = function(req, res) {
-    var query = model.VintageCellar.find({user:req.session.user_id});
+    var query = model.VintageCellar.find({user:req.session.user_id},{'__v':0});
     query.populate('beer');
     query.exec(function(err,results) {
         res.send(results);

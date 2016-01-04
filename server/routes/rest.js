@@ -7,11 +7,11 @@ function createRest(service, customId) {
             // console.log("INFO", "findAll");
             model[service].find().exec(function(err,results) {
                 if ( err ) {
-                    res.send(err);    
+                    res.send(err);
                 } else {
                     res.send(results);
                 }
-            });    
+            });
         },
         save: function(req, res) {
             // console.log("INFO", "save");
@@ -34,9 +34,9 @@ function createRest(service, customId) {
         },
         findById: function(req, res) {
             // console.log("INFO", "findById");
-            model[service].findOne({_id:req.params.id},function(err,results) {
+            model[service].findOne({_id:req.params.id}, {'__v':0},function(err,results) {
                 res.send(results);
-            });  
+            });
         }
     };
 }
@@ -56,6 +56,6 @@ exports.bind = function(name, rest, app, path, security) {
     app.get('/' + path + name+ "/:id", rest.findById)
     app.get('/' + path + name, rest.findAll);
     app.post('/' + path + name + "/:id", security.save || [], rest.save);
-    app.post('/' + path + name, security.save || [], rest.save);    
-    app.delete('/' + path + name + "/:id", rest.remove);    
+    app.post('/' + path + name, security.save || [], rest.save);
+    app.delete('/' + path + name + "/:id", rest.remove);
 };
