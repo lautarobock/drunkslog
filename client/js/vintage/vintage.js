@@ -106,16 +106,25 @@ define(["resources"], function() {
         "VintageEditController",
         [
             '$scope', '$location', '$modal','$rootScope', '$timeout', '$q',
-            'MainTitle', 'focus','combosData','vintage','$translate',
+            'MainTitle', 'focus','vintage','$translate', 'Beer',
             function(
                 $scope,
                 $location, $modal, $rootScope,   $timeout,   $q,
-                MainTitle, focus, combosData, vintage, $translate) {
+                MainTitle, focus, vintage, $translate, Beer) {
 
                 $scope.$log.debug("BEER",vintage);
 
                 //comboData comes from routeparams
-                $scope.beers = combosData[0];
+                // $scope.beers = combosData[0];
+                $scope.beers = [];
+
+                $scope.filterBeer = function(name) {
+    				return Beer.query({
+    					"filter[searchCriteria]": name
+    				}, function(r) {
+                        $scope.beers = r;
+                    }).$promise;
+    			};
 
                 $scope.vintage = vintage;
                 MainTitle.add($scope.vintage.name||$translate('beer.new'));
@@ -169,13 +178,18 @@ define(["resources"], function() {
                     $scope.vintage.title = $scope.vintage.title || beer.name;
                 };
 
-                $scope.formatBeerSelection = function(beer_id, beers) {
-                    if ( !beers ) return null;
-                    var filtered = util.Arrays.filter(beers, function(item) {
-                        return item._id == beer_id ? 0 : -1;
-                    });
-                    if ( filtered.length > 0 ) {
-                        return filtered[0].name;
+                $scope.formatBeerSelection = function(beer_id, beers, $item) {
+                    if ( $scope.vintage.beer_name ) {
+                        return $scope.vintage.beer_name
+                    } else if ( beers ) {
+                        var filtered = util.Arrays.filter(beers, function(item) {
+                            return item._id == beer_id ? 0 : -1;
+                        });
+                        if ( filtered.length > 0 ) {
+                            return filtered[0].name;
+                        } else {
+                            return null;
+                        }
                     } else {
                         return null;
                     }

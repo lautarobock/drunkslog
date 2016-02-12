@@ -16,6 +16,12 @@ define(['../resources'], function() {
 
             $scope.beers = Beer;
 
+			$scope.filterBeer = function(name) {
+				return Beer.query({
+					"filter[searchCriteria]": name
+				}).$promise;
+			};
+
             $scope.sort = {
                 // initial: '-score.overall -score.avg score.position',
                 combo: [{

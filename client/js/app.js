@@ -179,12 +179,12 @@ define("app", [
                     templateUrl: 'vintage/vintage-edit.html',
                     controller: 'VintageEditController',
                     resolve: {
-                        combosData: [
-                            'VintageEditControllerResolve',
-                            function(VintageEditControllerResolve) {
-                                return VintageEditControllerResolve();
-                            }
-                        ],
+                        // combosData: [
+                        //     'VintageEditControllerResolve',
+                        //     function(VintageEditControllerResolve) {
+                        //         return VintageEditControllerResolve();
+                        //     }
+                        // ],
                         vintage: ['VintageCellar', function(VintageCellar) {
                             var vintage = new VintageCellar();
                             vintage.left = 0;
@@ -199,12 +199,12 @@ define("app", [
                     templateUrl: 'vintage/vintage-edit.html',
                     controller: 'VintageEditController',
                     resolve: {
-                        combosData: [
-                        'VintageEditControllerResolve',
-                            function(VintageEditControllerResolve) {
-                                return VintageEditControllerResolve();
-                            }
-                        ],
+                        // combosData: [
+                        // 'VintageEditControllerResolve',
+                        //     function(VintageEditControllerResolve) {
+                        //         return VintageEditControllerResolve();
+                        //     }
+                        // ],
                         vintage: [
                             'VintageCellar',
                             '$route',
@@ -220,19 +220,25 @@ define("app", [
                     templateUrl: 'vintage/vintage-edit.html',
                     controller: 'VintageEditController',
                     resolve: {
-                        combosData: [
-                        'VintageEditControllerResolve',
-                        function(VintageEditControllerResolve) {
-                            return VintageEditControllerResolve();
-                        }
-                        ],
+                        // combosData: [
+                        // 'VintageEditControllerResolve',
+                        // function(VintageEditControllerResolve) {
+                        //     return VintageEditControllerResolve();
+                        // }
+                        // ],
                         vintage: [
                             'VintageCellar',
                             '$route',
-                            function(VintageCellar, $route) {
+                            'Beer',
+                            function(VintageCellar, $route, Beer) {
                                 return VintageCellar.get({
                                     _id: $route.current.params.vintage_id
-                                }).$promise;
+                                }).$promise.then(function (vintage) {
+                                    return Beer.get({_id: vintage.beer}).$promise.then(function(beer) {
+                                        vintage.beer_name = beer.name;
+                                        return vintage;
+                                    });
+                                });
                             }
                         ]
                     }

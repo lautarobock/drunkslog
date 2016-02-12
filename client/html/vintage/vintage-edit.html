@@ -10,14 +10,14 @@
                         {{ 'beer.data.beer' | translate }}
                     </label>
                     <input
-                        typeahead="beer._id as beer.name for beer in beers | filter:$viewValue | orderBy:'name'"
+                        typeahead="beer._id as beer.name for beer in filterBeer($viewValue) | orderBy:'name'"
                         class="form-control"
                         type="text"
                         ng-model="vintage.beer"
                         typeahead-editable="false"
                         typeahead-on-select="onSelectBeer($item)"
                         typeahead-wait-ms="500"
-                        typeahead-input-formatter="formatBeerSelection($model,beers)"
+                        typeahead-input-formatter="formatBeerSelection($model,beers, $item)"
                         placeholder="Comience a escribir para buscar"/>
                 </div>
                 <div class="col-lg-6" ng-class="errorClass('title')" dl-input-text id="vintagetitle" value="vintage.title" caption="{{'vintage.data.title'|translate}}"></div>
