@@ -3,15 +3,15 @@ define(["abm/templates"],function() {
     var gt = angular.module('gt.abm', ['gt.abm.templates']);
 
     gt.constant("PAGE_SIZE",10);
-    
+
     function getValue(entity,field) {
         var value;
         if ( field.indexOf(".") != -1 ) {
             var chain = field.split(".");
-            
+
             for ( var i=0; i<chain.length; i++) {
                 if (entity) {
-                    entity = entity[chain[i]];    
+                    entity = entity[chain[i]];
                 }
             }
             value = entity||'-';
@@ -20,7 +20,7 @@ define(["abm/templates"],function() {
         }
         return value;
     }
-    
+
     gt.filter("pageFilter",function(PAGE_SIZE) {
         return function(rows,page,pageSize) {
             var from = (page-1)*(pageSize||PAGE_SIZE);
@@ -36,7 +36,7 @@ define(["abm/templates"],function() {
             return value;
         }
     }
-    
+
     var fixedFilters = {
         equal: function(fieldName,value,ic) {
             return function(item) {
@@ -46,7 +46,7 @@ define(["abm/templates"],function() {
         like: function(fieldName,value,ic) {
             return function(item) {
                 var patt = new RegExp(".*"+convert(value,ic)+".*");
-                
+
                 return patt.exec(convert(getValue(item,fieldName),ic)) != null ? 0 : -1;
             };
         },
@@ -68,7 +68,7 @@ define(["abm/templates"],function() {
             };
         }
     };
-    
+
     gt.filter("textFilter", function($filter,$timeout) {
         return function(rows, criteria) {
             return $filter('filter')(rows,criteria);
@@ -89,16 +89,16 @@ define(["abm/templates"],function() {
                         filters.push(f);
                     }
                 });
-                
+
                 angular.forEach(filters,function(f) {
                     rows = util.Arrays.filter(rows,f);
                 });
                 return rows;
             }
-            
+
         };
     });
-    
+
     gt.run(function($templateCache,abm) {
         $templateCache.put(abm.templateDir +"/abm-checkbox.html",
             '<div class="checkbox" style="margin-bottom: 0;">'+
@@ -110,7 +110,7 @@ define(["abm/templates"],function() {
                 '{{getValue(row,header)}}' +
             '</a>');
     });
-    
+
     gt.directive('gtTable', function($compile, $rootScope, sortData, PAGE_SIZE, abm) {
         return {
             restrict : 'EA',
@@ -128,7 +128,7 @@ define(["abm/templates"],function() {
             },
             templateUrl: abm.templateDir +'/abm.html',
             link : function(scope, element, attrs) {
-                
+
             },
             controller: function($scope,$timeout) {
 
@@ -138,7 +138,7 @@ define(["abm/templates"],function() {
                 $scope._searchCriteria = $scope.searchCriteria;
 
                 var activeTimeout = null;
-                
+
                 $scope.search = function() {
                     if ( activeTimeout ) $timeout.cancel(activeTimeout);
                     activeTimeout = $timeout(function() {
@@ -150,9 +150,9 @@ define(["abm/templates"],function() {
                     $scope.searchCriteria = ""
                     $scope._searchCriteria = "";
                 };
-                
+
                 $scope.sort = sortData($scope.config().orderBy,$scope.config().orderDir||"",$scope.config().sort);
-                
+
                 $scope.getActiveClass = function(tab) {
                     if (tab == $scope.entity()) {
                         return 'active';
@@ -160,11 +160,11 @@ define(["abm/templates"],function() {
                         return '';
                     }
                 };
-                
+
                 $scope.urlTemplate = function(filter) {
                     return abm.templateDir + '/abm-filter-' + filter.type + ".html";
                 };
-                
+
                 $scope.getHeaderStyle = function(header) {
                     var style = header.headerStyle || {};
                     if ( header.width ) {
@@ -177,14 +177,14 @@ define(["abm/templates"],function() {
                     $scope.rows.push({_draft:true});
                     $scope.page = $scope.getPageCount($scope.rows.length);
                 };
-                
+
                 $scope.edit_id = null;
 
                 $scope.isEditing = function(row) {
                     return row._id == $scope.edit_id;
                 };
 
-                
+
                 $scope.valueTemplate = function(row,header) {
                     if ( $scope.isEditing(row) && !header.readonly) {
                         if ( !header.type || header.type == 'text' || header.type == 'number'  ) {
@@ -206,36 +206,37 @@ define(["abm/templates"],function() {
                         return abm.templateDir + '/abm-value.html';
                     }
                 };
-                
+
                 $scope.edit = function(row) {
                     $scope.edit_id = row._id;
                 };
-                
+
                 $scope.copy = function(row) {
                     return angular.copy(row);
                 };
-                
+
                 $scope.getValue = function(entity,header) {
                     var value;
                     if ( header.field.indexOf(".") != -1 ) {
                         var chain = header.field.split(".");
-                        
+
                         for ( var i=0; i<chain.length; i++) {
                             if (entity) {
-                                entity = entity[chain[i]];    
+                                entity = entity[chain[i]];
                             }
                         }
-                        value = entity||'-';
+                        // value = entity||'-';
+                        value = entity;
                     } else {
                         value = entity[header.field];
                     }
                     if ( header.format ) {
-                        return header.format(value);    
+                        return header.format(value);
                     } else {
-                        return value;    
+                        return value;
                     }
                 };
-                
+
                 $scope.remove = function(row) {
                     var clean = function() {
                         util.Arrays.remove($scope.rows,row);
@@ -243,21 +244,21 @@ define(["abm/templates"],function() {
                     if (!row.$delete) {
                         $scope.config().data.remove(row,clean);
                     } else {
-                        row.$delete(clean);    
+                        row.$delete(clean);
                     }
                 };
-                
+
                 $scope.cancel = function (row,value) {
                     if (row._draft){
                         util.Arrays.remove($scope.rows,row);
                     } else {
                         angular.forEach($scope.config().headers,function(h) {
                             value[h.field] = row[h.field];
-                        });                
+                        });
                     }
                     $scope.edit_id = null;
                 };
-                
+
                 $scope.save = function(value,row) {
                     angular.forEach($scope.config().headers,function(h) {
                         row[h.field] = value[h.field];
@@ -266,7 +267,7 @@ define(["abm/templates"],function() {
                         if (!row.$save) {
                             $scope.config().data.save(row);
                         } else {
-                            row.$save();    
+                            row.$save();
                         }
                         $scope.edit_id = null;
                     } else {
@@ -275,7 +276,7 @@ define(["abm/templates"],function() {
                         });
                     }
                 };
-        
+
                 $scope.page = 1;
                 if ( $scope.config().collection ) {
                     // $scope.rows = $scope.config().collection;
@@ -286,14 +287,14 @@ define(["abm/templates"],function() {
                     $scope.loading = true;
                     $scope.rows = $scope.config().data.query(function() {
                         $scope.loading = false;
-                    });    
+                    });
                 }
-                
-                
+
+
                 $scope.pageSize = function() {
                     return $scope.config().pageSize || PAGE_SIZE;
                 };
-                
+
                 $scope.getPageCount = function(length) {
                     var pageSize = $scope.pageSize();
                     return Math.ceil(length/pageSize);
@@ -301,7 +302,7 @@ define(["abm/templates"],function() {
             }
         };
     });
-    
+
     gt.provider("abm", function() {
         var service = {
             templateDir: "abm"
@@ -328,7 +329,7 @@ define(["abm/templates"],function() {
                     if ( this.sort ) {
                         return this.sort;
                     } else  {
-                        return this.field; 
+                        return this.field;
                     }
                 },
                 reverse: function() {
@@ -363,6 +364,6 @@ define(["abm/templates"],function() {
             return data;
         };
     });
-    
+
     return gt;
 });

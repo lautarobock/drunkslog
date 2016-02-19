@@ -177,6 +177,20 @@
 
     };
 
+    var SECOND = 1000;
+    var MINUTE = SECOND * 60;
+    var HOUR = MINUTE * 60;
+    var DAY = HOUR * 24;
+    var MONTH = DAY * 30;
+    var YEAR = DAY * 365;
+
+    exports.SECOND = SECOND;
+    exports.MINUTE = MINUTE;
+    exports.HOUR = HOUR;
+    exports.DAY = DAY;
+    exports.MONTH = MONTH;
+    exports.YEAR = YEAR;
+
     exports.dateDiff = function(from, to) {
         from = new Date(from);
         to = new Date(to);
@@ -194,12 +208,7 @@
             return 'Este mismo momento';
         }
 
-        var SECOND = 1000;
-        var MINUTE = SECOND * 60;
-        var HOUR = MINUTE * 60;
-        var DAY = HOUR * 24;
-        var MONTH = DAY * 30;
-        var YEAR = DAY * 365;
+
 
 
         var years = Math.floor(time / YEAR);
