@@ -9,18 +9,27 @@
                     <label for="beer" class="control-label" tooltip-placement="right" tooltip="{{ 'vintage.data.beer.help' | translate }}">
                         {{ 'beer.data.beer' | translate }}
                     </label>
-                    <input
-                        typeahead="beer._id as beer.name for beer in filterBeer($viewValue) | orderBy:'name'"
-                        class="form-control"
-                        type="text"
-                        ng-model="vintage.beer"
-                        typeahead-editable="false"
-                        typeahead-on-select="onSelectBeer($item)"
-                        typeahead-wait-ms="500"
-                        typeahead-input-formatter="formatBeerSelection($model,beers, $item)"
-                        placeholder="Comience a escribir para buscar"/>
+                    <div class="input-group">
+                        <input
+                            typeahead="beer._id as beer.name for beer in filterBeer($viewValue) | orderBy:'name'"
+                            class="form-control"
+                            type="text"
+                            ng-model="vintage.beer"
+                            typeahead-editable="false"
+                            typeahead-on-select="onSelectBeer($item)"
+                            typeahead-wait-ms="500"
+                            typeahead-input-formatter="formatBeerSelection($model,beers, $item)"
+                            placeholder="Comience a escribir para buscar"/>
+                            <div class="input-group-btn">
+                                <a ng-disabled="!vintage.beer" title="ver calificaciones y detalle de la cerveza" class="btn btn-default" ng-href="#/beer/detail/{{vintage.beer}}">
+                                    <span class="glyphicon glyphicon-eye-open"></span>
+                                </a>
+                            </div>
+                    </div>
                 </div>
-                <div class="col-lg-6" ng-class="errorClass('title')" dl-input-text id="vintagetitle" value="vintage.title" caption="{{'vintage.data.title'|translate}}"></div>
+                <div class="col-lg-6" ng-class="errorClass('title')"
+                    dl-input-text id="vintagetitle" value="vintage.title"
+                    caption="{{'vintage.data.title'|translate}}"></div>
             </div>
             <div class="form-group">
                 <div class="col-lg-3" ng-class="errorClass('bottling')">
