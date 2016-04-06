@@ -56,7 +56,7 @@ require("./routes/ceo/ceo").configure(app);
 
 
 // log.info("TEST");
-var server = http.createServer(app).listen(app.get('port'), function(){
+var server = http.createServer(app).listen(process.env.VCAP_APP_PORT || app.get('port') || 3000, function(){
     // log.info('Express server listening on port ' + app.get('port'));
   console.log('Express server listening on port ' + app.get('port'));
 });

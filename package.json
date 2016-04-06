@@ -4,7 +4,8 @@
   "description": "Drunk's Log =========",
   "main": "server/server.js",
   "scripts": {
-    "test": "./run-test.sh"
+    "test": "./run-test.sh",
+    "start": "node server/server.js"
   },
   "repository": {
     "type": "git",
