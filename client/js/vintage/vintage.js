@@ -21,7 +21,7 @@ define(["resources"], function() {
             singular: $translate('beer.data.beer'),
             orderBy: "beer.name",
             orderDir: "",
-            pageSize: 20,
+            pageSize: 50,
             headers: [{
                 field:'title',
                 caption: $translate('beer.data.beer'),
@@ -44,7 +44,7 @@ define(["resources"], function() {
             },{
                 field:'beer.score.avg',
                 caption: $translate('beer.data.score'),
-                width: '7em',
+                width: '5em',
                 tooltip: $translate('beer.data.score.help'),
                 class: function(cellar) {
                     if ( cellar.beer.score ) {
@@ -55,7 +55,7 @@ define(["resources"], function() {
                 }
             },{
                 field: 'left',
-                width: '10em',
+                width: '5em',
                 caption: $translate('cellar.amount'),
                 class: function(cellar) {
                     if ( cellar.amount === 0 ) {
@@ -63,23 +63,89 @@ define(["resources"], function() {
                     }
                 }
             },{
-                field:'entry',
-                caption: 'Fecha',
-                width: '14em',
+                field:'bottling.date',
+                caption: 'Embotellada',
+                width: '7em',
+                title: function(rating) {
+                    return util.dateDiff(new Date(),rating.bottling.date);
+                },
                 format: function(value) {
-                    var format = $filter('date');
-                    return format(
-                        new Date(
-                            format(
-                                value,
-                                'dd-MM-yyyy'
-                            ).date
-                        ),
-                        'dd-MM-yyyy'
-                    );
+                    return formatDate(value);
+                }
+            },{
+                field:'entry.date',
+                caption: 'Entro',
+                width: '7em',
+                title: function(rating) {
+                    return util.dateDiff(new Date(),rating.entry.date);
+                },
+                format: function(value) {
+                    return formatDate(value);
+                }
+            },{
+                field:'expiration.date',
+                caption: 'Vence',
+                width: '7em',
+                title: function(rating) {
+                    return util.dateDiff(new Date(),rating.expiration.date);
+                },
+                format: function(value) {
+                    return formatDate(value);
+                },
+                class: function(vintage) {
+                    if ( vintage.expiration ) {
+                        return dateClass(vintage.expiration.date)
+                    }
+                }
+            },{
+                field:'windowStart',
+                caption: 'Desde',
+                width: '7em',
+                title: function(rating) {
+                    return util.dateDiff(new Date(),rating.windowStart);
+                },
+                format: function(value) {
+                    return formatDate(value);
+                },
+                class: function(vintage) {
+                    return dateClass(vintage.windowStart)
+                }
+            },{
+                field:'windowEnd',
+                caption: 'Hasta',
+                width: '7em',
+                title: function(rating) {
+                    return util.dateDiff(new Date(),rating.windowEnd);
+                },
+                format: function(value) {
+                    return formatDate(value);
+                },
+                class: function(vintage) {
+                    return dateClass(vintage.windowEnd)
                 }
             }]
         };
+
+        function dateClass(date) {
+            if ( !date ) return;
+            var now = new Date().getTime();
+            var time = new Date(date).getTime();
+            var diff = time - now;
+            if ( diff < 0 ) {
+                return 'text-danger';
+            } else if ( diff < util.MONTH ) {
+                return 'text-warning';
+            }
+        }
+
+        function formatDate(value) {
+            if ( !value ) return '-';
+            var format = $filter('date');
+            return format(
+                new Date(value),
+                'dd-MM-yyyy'
+            );
+        }
 
         function reload() {
             VintageCellar.query({populate:true}, function(cellars) {
@@ -106,16 +172,25 @@ define(["resources"], function() {
         "VintageEditController",
         [
             '$scope', '$location', '$modal','$rootScope', '$timeout', '$q',
-            'MainTitle', 'focus','combosData','vintage','$translate',
+            'MainTitle', 'focus','vintage','$translate', 'Beer',
             function(
                 $scope,
                 $location, $modal, $rootScope,   $timeout,   $q,
-                MainTitle, focus, combosData, vintage, $translate) {
+                MainTitle, focus, vintage, $translate, Beer) {
 
                 $scope.$log.debug("BEER",vintage);
 
                 //comboData comes from routeparams
-                $scope.beers = combosData[0];
+                // $scope.beers = combosData[0];
+                $scope.beers = [];
+
+                $scope.filterBeer = function(name) {
+    				return Beer.query({
+    					"filter[searchCriteria]": name
+    				}, function(r) {
+                        $scope.beers = r;
+                    }).$promise;
+    			};
 
                 $scope.vintage = vintage;
                 MainTitle.add($scope.vintage.name||$translate('beer.new'));
@@ -169,13 +244,18 @@ define(["resources"], function() {
                     $scope.vintage.title = $scope.vintage.title || beer.name;
                 };
 
-                $scope.formatBeerSelection = function(beer_id, beers) {
-                    if ( !beers ) return null;
-                    var filtered = util.Arrays.filter(beers, function(item) {
-                        return item._id == beer_id ? 0 : -1;
-                    });
-                    if ( filtered.length > 0 ) {
-                        return filtered[0].name;
+                $scope.formatBeerSelection = function(beer_id, beers, $item) {
+                    if ( $scope.vintage.beer_name ) {
+                        return $scope.vintage.beer_name
+                    } else if ( beers ) {
+                        var filtered = util.Arrays.filter(beers, function(item) {
+                            return item._id == beer_id ? 0 : -1;
+                        });
+                        if ( filtered.length > 0 ) {
+                            return filtered[0].name;
+                        } else {
+                            return null;
+                        }
                     } else {
                         return null;
                     }
