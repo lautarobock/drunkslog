@@ -3,5 +3,5 @@ Drunk's Log
 
 Catalog for Beer
 
-![alt tag](https://www.codeship.io/projects/cfc6d250-511f-0131-aa86-1a5f6931073e/status)
+[ ![Codeship Status for lautarobock/drunkslog](https://app.codeship.com/projects/885bf0e0-49fa-0135-d860-2ebc74011aa2/status?branch=master)](https://app.codeship.com/projects/232397)
 
