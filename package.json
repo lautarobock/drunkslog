@@ -1,5 +1,8 @@
 {
   "name": "drunkslog",
+  "engines": {
+    "node": "6.11.1"
+  },
   "version": "0.1.1",
   "description": "Drunk's Log =========",
   "main": "server/server.js",
