@@ -35,16 +35,15 @@ exports.findAll = function(req, res) {
     }
     console.log("filter",JSON.stringify(filter));
     model.Beer.find(filter)
-        .limit(req.query.limit)
-        .skip(req.query.skip)
+        .limit(req.query.limit ? parseInt(req.query.limit) : undefined)
+        .skip(req.query.skip ? parseInt(req.query.skip) : undefined)
         .sort(req.query.sort)
         .populate('style')
         .populate('styleByLabel')
         .populate('brewery')
         .populate('category')
-        .exec(function(err,results) {
-            res.send(results);
-    });    
+        .then(results => res.send(results))
+        .catch(err => console.error(err));    
 };
 
 exports.save = function(req, res) {

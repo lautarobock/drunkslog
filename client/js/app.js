@@ -88,19 +88,19 @@ define("app", [
 
         $rootScope.loginSuccess = false;
 
-        $rootScope.$on('g+login', function(event, authResult) {
+        $rootScope.$on('g+login', function(event, googleUser) {
 
-            evaluateAuthResult(authResult, function(err, googleUser) {
-                if ( err ) {
-                    $rootScope.loginError = err.message;
-                    $rootScope.$apply();
-                    $log.error("ERROR", "Login Error", err.message);
-                } else if ( googleUser ) {
+            // evaluateAuthResult(authResult, function(err, googleUser) {
+            //     if ( err ) {
+            //         $rootScope.loginError = err.message;
+            //         $rootScope.$apply();
+            //         $log.error("ERROR", "Login Error", err.message);
+            //     } else if ( googleUser ) {
                     $rootScope.googleUser = googleUser;
                     Login.get({
-                            google_id:googleUser.id,
-                            name:googleUser.name,
-                            email: googleUser.email
+                            google_id:googleUser.getId(),
+                            name:googleUser.getBasicProfile().getName(),
+                            email: googleUser.getBasicProfile().getEmail()
                         }, function(user) {
                             $rootScope.user = User.get({_id: user._id}, function(user) {
                                 $rootScope.loginSuccess = true;
@@ -109,10 +109,10 @@ define("app", [
                                 RatingService.loadMyRatings();
                             });
                     });
-                } else {
-                    $log.info("ERROR", "Silent Login Error");
-                }
-            });
+                // } else {
+                //     $log.info("ERROR", "Silent Login Error");
+                // }
+            // });
         });
 
     }]);

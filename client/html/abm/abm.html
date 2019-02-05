@@ -28,7 +28,7 @@
                 <div class="col-sm-{{config().filterColSpan||'12'}}" style="margin-bottom: 1em;">
                     <label for="filter.name">{{config().filterLabel}}</label>
                     <div class="input-group" style="width: 100%">
-                        <input ng-change="search()" type="text" id="filter.name"  class="form-control input-sm" ng-model="_searchCriteria" placeholder="({{'side.search.fields'|translate}})" />
+                        <input ng-change="search()" type="text" id="filter.name"  class="form-control input-sm" ng-model="_searchCriteria" placeholder="({{'side.search.fields'|translate}})" autocomplete="off" />
                         <span class="input-group-btn">
                             <button ng-disabled="searchCriteria==''"  ng-click="clearSearch()" class="btn btn-default btn-sm" type="button">
                                 <span class="glyphicon glyphicon-remove"></span>

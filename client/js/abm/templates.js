@@ -69,7 +69,7 @@ define([], function() {  	angular.module("gt.abm.templates", []).run(["$template
     "                <div class=\"col-sm-{{config().filterColSpan||'12'}}\" style=\"margin-bottom: 1em;\">\n" +
     "                    <label for=\"filter.name\">{{config().filterLabel}}</label>\n" +
     "                    <div class=\"input-group\" style=\"width: 100%\">\n" +
-    "                        <input ng-change=\"search()\" type=\"text\" id=\"filter.name\"  class=\"form-control input-sm\" ng-model=\"_searchCriteria\" placeholder=\"({{'side.search.fields'|translate}})\" />\n" +
+    "                        <input ng-change=\"search()\" type=\"text\" id=\"filter.name\"  class=\"form-control input-sm\" ng-model=\"_searchCriteria\" placeholder=\"({{'side.search.fields'|translate}})\" autocomplete=\"off\" />\n" +
     "                        <span class=\"input-group-btn\">\n" +
     "                            <button ng-disabled=\"searchCriteria==''\"  ng-click=\"clearSearch()\" class=\"btn btn-default btn-sm\" type=\"button\">\n" +
     "                                <span class=\"glyphicon glyphicon-remove\"></span>\n" +

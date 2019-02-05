@@ -13,7 +13,8 @@ function buildNewUser(google_id, name, email) {
 }
 
 exports.getForLogin = function(req, res){
-    model.User.findOne({'google_id':req.params.google_id}).exec(function(err,user) {
+    console.log('getForLogin', req.params.google_id);
+    model.User.findOne({'google_id':req.params.google_id}).then(user => {
         if (user) {
             
             //Set data in session (maybe must doit in filter)
@@ -42,5 +43,7 @@ exports.getForLogin = function(req, res){
             });
         }
 
+    }).catch(err => {
+        console.error(err);
     });   
 };

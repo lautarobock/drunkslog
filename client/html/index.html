@@ -10,7 +10,7 @@
 
         <!-- it could be loaded by require, but i'm not sure if it is the best -->
         <!-- For Google+ Login -->
-        <script src="https://apis.google.com/js/client:plusone.js"></script>
+        <script src="https://apis.google.com/js/platform.js"></script>
         <script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?libraries=places&sensor=false">
         </script>
 
@@ -77,45 +77,72 @@
 
         (function() {
             var po = document.createElement('script'); po.type = 'text/javascript'; po.async = true;
-            po.src = 'https://apis.google.com/js/plusone.js?onload=onLoadSuccess';
+            po.src = 'https://apis.google.com/js/platform.js?onload=onLoadSuccess';
             var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(po, s);
         })();
 
         var google_client_id = '85681441773-v06bveckr9sig8k5aqtpbi19a1ogq511.apps.googleusercontent.com';
-        var google_scope = ['https://www.googleapis.com/auth/plus.login', 'https://www.googleapis.com/auth/userinfo.email', 'https://www.googleapis.com/auth/userinfo.profile'];
+        // var google_scope = ['https://www.googleapis.com/auth/plus.login', 'https://www.googleapis.com/auth/userinfo.email', 'https://www.googleapis.com/auth/userinfo.profile'];
 
         //Registrar nuevo usuario
         function googleSignIn() {
-            gapi.auth.authorize({
-                client_id: google_client_id,
-                scope: google_scope,
-                immediate:false
-            },
-            cb);
+            // gapi.auth.authorize({
+            //     client_id: google_client_id,
+            //     // scope: google_scope,
+            //     immediate:false
+            // },
+            // cb);
+            gapi.load('auth2', function(){
+                // Retrieve the singleton for the GoogleAuth library and set up the client.
+                auth2 = gapi.auth2.init({
+                    client_id: google_client_id,
+                    // cookiepolicy: 'single_host_origin',
+                    // Request scopes in addition to 'profile' and 'email'
+                    //scope: google_scope
+                });
+                // auth2.attachClickHandler('login', {}, onSuccess, onFailure);
+                auth2.isSignedIn.listen(function(val) {
+                    console.log('Signin state changed to ', val);
+                    if (val) {
+                        console.log(auth2.currentUser.get().getBasicProfile());
+                        onSuccess(auth2.currentUser.get());
+                    }
+                });
+            });
         }
+
+        var onSuccess = function(user) {
+            console.log('Signed in as ' + user.getBasicProfile());
+            console.log('Signed in as ' + user.getBasicProfile().getName());
+            console.log('Signed in as ' + user.getId());
+            // $scope.$emit('g+login', user)
+            cb(user);
+
+        };
 
         //Acceder con usuario existente
         function googleLogIn() {
-            gapi.auth.authorize({
-                client_id: google_client_id,
-                scope: google_scope,
-                immediate:true
-            },
-            cb);
+            // gapi.auth.authorize({
+            //     client_id: google_client_id,
+            //     scope: google_scope,
+            //     immediate:true
+            // },
+            // cb);
+            googleSignIn();
         }
 
         function onLoadSuccess() {
           googleLogIn()
         }
 
-        function cb(authResult) {
+        function cb(user) {
             function waitForNg() {
                 // console.log("Try");
                 var $scope = angular.element(document.body).scope();
                 if ( !$scope ) {
                     setTimeout(waitForNg,500);
                 } else {
-                    $scope.$emit('g+login', authResult);
+                    $scope.$emit('g+login', user);
                 }
             }
             waitForNg();

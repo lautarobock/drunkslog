@@ -67,7 +67,11 @@ define(["resources"], function() {
                 caption: 'Embotellada',
                 width: '7em',
                 title: function(rating) {
-                    return util.dateDiff(new Date(),rating.bottling.date);
+                    if (rating.bottling && rating.bottling.date) {
+                        return util.dateDiff(new Date(),rating.bottling.date);
+                    } else {
+                        return '';
+                    }
                 },
                 format: function(value) {
                     return formatDate(value);
@@ -87,7 +91,11 @@ define(["resources"], function() {
                 caption: 'Vence',
                 width: '7em',
                 title: function(rating) {
-                    return util.dateDiff(new Date(),rating.expiration.date);
+                    if (rating.expiration && rating.expiration.date) {
+                        return util.dateDiff(new Date(),rating.expiration.date);
+                    } else {
+                        return '';
+                    }
                 },
                 format: function(value) {
                     return formatDate(value);
