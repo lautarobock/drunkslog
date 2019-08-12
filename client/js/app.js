@@ -98,9 +98,12 @@ define("app", [
             //     } else if ( googleUser ) {
                     $rootScope.googleUser = googleUser;
                     Login.get({
-                            google_id:googleUser.getId(),
-                            name:googleUser.getBasicProfile().getName(),
-                            email: googleUser.getBasicProfile().getEmail()
+                            // google_id:googleUser.getId(),
+                            // name:googleUser.getBasicProfile().getName(),
+                            // email: googleUser.getBasicProfile().getEmail()
+                            google_id: googleUser.id,
+                            name: googleUser.name,
+                            email: googleUser.email
                         }, function(user) {
                             $rootScope.user = User.get({_id: user._id}, function(user) {
                                 $rootScope.loginSuccess = true;

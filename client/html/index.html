@@ -76,9 +76,14 @@
     <script type="text/javascript">
 
         (function() {
-            var po = document.createElement('script'); po.type = 'text/javascript'; po.async = true;
-            po.src = 'https://apis.google.com/js/platform.js?onload=onLoadSuccess';
-            var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(po, s);
+            // var po = document.createElement('script'); po.type = 'text/javascript'; po.async = true;
+            // po.src = 'https://apis.google.com/js/platform.js?onload=onLoadSuccess';
+            // var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(po, s);
+            cb({
+                id: localStorage.getItem('drunkslogUser'),
+                name: 'Lautaro Cozzani',
+                email: 'lautaro.listas@gmail.com'
+            });
         })();
 
         var google_client_id = '85681441773-v06bveckr9sig8k5aqtpbi19a1ogq511.apps.googleusercontent.com';
@@ -118,6 +123,10 @@
             // $scope.$emit('g+login', user)
             cb(user);
 
+        };
+
+        var onFailure = function(error) {
+            console.log(error);
         };
 
         //Acceder con usuario existente
