@@ -11,7 +11,7 @@
             "program": "${workspaceRoot}\\server\\server.js",
             "cwd": "${workspaceRoot}",
             "env": {
-                "MONGOLAB_URI": "mongodb://drunkslog:drunkslog@ds063168.mongolab.com:63168/drunkslog"
+                "MONGOLAB_URI": "mongodb+srv://drunkslog:3XfxTRXB5mVbK5Z@birrasquehetomado-washx.mongodb.net/drunkslog?retryWrites=true&w=majority"
             }
         }
     ]

@@ -1,2 +1,2 @@
-export MONGOLAB_URI=mongodb://drunkslog:drunkslog@ds063168.mongolab.com:63168/drunkslog
+export MONGOLAB_URI=mongodb+srv://drunkslog:3XfxTRXB5mVbK5Z@birrasquehetomado-washx.mongodb.net/drunkslog?retryWrites=true&w=majority
 node server/server.js
